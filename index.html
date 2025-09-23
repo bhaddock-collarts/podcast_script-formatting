@@ -32,8 +32,7 @@
       box-shadow: 0 25px 50px rgba(0,0,0,0.2);
       display: flex;
       flex-direction: column;
-      min-height: 100%;   /* stretch within iframe */
-      height: auto;       /* allow expansion */
+      height: auto;
     }
 
     /* Header */
@@ -65,10 +64,11 @@
       transition: width 0.4s ease;
     }
 
-    /* Slides */
+    /* Slides wrapper */
     .course-content {
       flex: 1;
       padding: 30px;
+      min-height: 300px; /* keeps space for nav */
     }
 
     .slide {
@@ -82,7 +82,7 @@
     }
 
     .slide.active {
-      display: flex;
+      display: block; /* important: keeps container sizing right */
       opacity: 1;
       transform: translateX(0);
     }
@@ -190,17 +190,17 @@
         });
 
         this.prevBtn.disabled = this.currentSlide === 0;
-
         if (this.currentSlide === this.totalSlides - 1) {
-          this.nextBtn.textContent = 'Next →';
           this.nextBtn.disabled = true;
         } else {
-          this.nextBtn.textContent = 'Next →';
           this.nextBtn.disabled = false;
         }
 
         const progressPercent = (this.currentSlide / (this.totalSlides - 1)) * 100;
         this.progress.style.width = progressPercent + '%';
+
+        // notify Canvas to resize
+        sendResize();
       }
 
       nextSlide() {
@@ -218,7 +218,19 @@
       }
     }
 
+    // resize messaging for Canvas
+    function sendResize() {
+      const height = document.documentElement.scrollHeight;
+      window.parent.postMessage(
+        { subject: "lti.frameResize", height: height },
+        "*"
+      );
+    }
+
     new Course();
+    window.addEventListener("load", sendResize);
+    window.addEventListener("resize", sendResize);
+    setInterval(sendResize, 1000); // keep checking
   </script>
 </body>
 </html>
