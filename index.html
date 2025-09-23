@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Audio Script Formatting - Mini Course</title>
+<style>
+  /* Reset + base */
+  html,body { height:100%; margin:0; padding:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); }
+  * { box-sizing: border-box; }
+
+  /* Outer page container (responsive) */
+  .page-wrap {
+    display:flex;
+    justify-content:center;
+    padding:20px;
+  }
+
+  /* Course container - will size to content */
+  .course-container {
+    width: 100%;
+    max-width: 1200px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+    overflow: visible;           /* allow content to determine height */
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg,#2c3e50 0%,#34495e 100%);
+    color: white;
+    padding: 18px 24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-top-left-radius:16px;
+    border-top-right-radius:16px;
+  }
+  .header h1 { font-size:1.2rem; margin:0; }
+
+  /* Slide area: only active slide is shown (others hidden) */
+  .slide-area { padding: 24px; }
+  .slide { display: none; padding: 24px; }
+  .slide.active { display: block; }
+
+  /* basic content styling (kept from original) */
+  .intro-slide { text-align:center; color: white; background: linear-gradient(135deg,#f093fb 0%,#f5576c 100%); padding:40px; border-radius:10px; }
+  .slide h2 { font-size: 2rem; color: #2c3e50; margin-bottom: 18px; }
+  .slide p { color: #444; line-height:1.6; margin-bottom: 12px; }
+
+  /* Example boxes, cards, grids (trimmed styles) */
+  .concept-card { background:#f8f9fa; padding:20px; border-radius:10px; margin:12px 0; border-left:6px solid #3498db; box-shadow: 0 8px 18px rgba(0,0,0,0.06); }
+  .example-box { background:#2c3e50; color:#ecf0f1; padding:18px; border-radius:8px; margin:14px 0; font-family: 'Courier New', monospace; }
+
+  .comparison-grid { display:grid; grid-template-columns: 1fr 1fr; gap:18px; margin:12px 0; }
+  .comparison-item { padding:14px; border-radius:8px; }
+  .wrong-way { background:#fff0f0; border:1px solid #e74c3c; }
+  .right-way { background:#f0fff4; border:1px solid #27ae60; }
+
+  .tips-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin:12px 0; }
+  .tip-card { background:white; padding:14px; border-radius:8px; box-shadow: 0 5px 12px rgba(0,0,0,0.06); border-top:4px solid #3498db; }
+
+  /* Navigation bar */
+  .navigation { display:flex; justify-content:space-between; align-items:center; padding:16px 24px; background:#f8f9fa; border-top:1px solid #eaeaea; border-bottom-left-radius:16px; border-bottom-right-radius:16px; }
+  .nav-btn { padding:10px 18px; border-radius:24px; border:none; cursor:pointer; font-size:1rem; }
+  .nav-btn:disabled { opacity:0.5; cursor:not-allowed; }
+  .nav-btn.prev { background: #bdc3c7; color:#fff; }
+  .nav-btn.next { background: linear-gradient(135deg,#27ae60,#2ecc71); color:#fff; }
+
+  /* responsive tweaks */
+  @media (max-width:900px) {
+    .comparison-grid { grid-template-columns: 1fr; }
+    .slide h2 { font-size:1.6rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="page-wrap">
+    <div class="course-container" id="courseContainer" role="region" aria-label="Audio Script Formatting course">
+      <div class="header">
+        <h1>🎧 Audio Script Formatting</h1>
+        <div aria-hidden="true" style="opacity:0.9; font-size:0.95rem;">
+          <span id="currentSlideLabel">1</span> / <span id="totalSlidesLabel">8</span>
+        </div>
+      </div>
+
+      <div class="slide-area" id="slideArea">
+        <!-- Slide 1 -->
+        <div class="slide active intro-slide">
+          <h2>Welcome to Audio Script Formatting!</h2>
+          <p>Learn to write professional scripts for podcasts, audio dramas, and voice-over work.</p>
+          <p style="margin-top:12px; font-size:1rem;">In just a few minutes, you'll master the essential formatting that makes your audio stories come alive!</p>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide">
+          <h2>Why Does Script Formatting Matter?</h2>
+          <div class="concept-card">
+            <h3>🎯 Clear Communication</h3>
+            <p>Proper formatting ensures everyone on your production team knows exactly what to do.</p>
+          </div>
+          <div class="concept-card">
+            <h3>⚡ Professional Standards</h3>
+            <p>Industry-standard formatting makes your scripts easy to read and follow.</p>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide">
+          <h2>The Four Essential Elements</h2>
+          <p style="text-align:center; color:#666;">Every professional audio script uses these four building blocks:</p>
+          <div class="tips-grid">
+            <div class="tip-card"><h4>📖 NARRATOR</h4><p>Sets scenes, provides context.</p></div>
+            <div class="tip-card"><h4>🎭 CHARACTERS</h4><p>Speakers — use ALL CAPS.</p></div>
+            <div class="tip-card"><h4>🔊 SFX</h4><p>Sound effects and atmosphere.</p></div>
+            <div class="tip-card"><h4>🎵 MUSIC</h4><p>Musical cues to set mood.</p></div>
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide">
+          <h2>Rule #1: Character Names in ALL CAPS</h2>
+          <div class="comparison-grid">
+            <div class="comparison-item wrong-way">
+              <div style="font-size:28px;">❌</div>
+              <h3>Wrong Way</h3>
+              <div class="example-box">
+                <div>sarah: Can you hear me?</div>
+                <div>Jake: I'm over here!</div>
+              </div>
+            </div>
+            <div class="comparison-item right-way">
+              <div style="font-size:28px;">✅</div>
+              <h3>Right Way</h3>
+              <div class="example-box">
+                <div><strong>SARAH:</strong> Can you hear me?</div>
+                <div><strong>JAKE:</strong> I'm over here!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 5
