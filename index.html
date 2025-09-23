@@ -1,1 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Script Formatting - Mini Course</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 10px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .course-container {
+            width: 100%;
+            height: 100vh;
+            max-height: 800px;
+            min-height: 600px;
+            max-width: 1200px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-counter {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .slide-area {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            min-height: 500px;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            display: none;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            box-sizing: border-box;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide.prev {
+            transform: translateX(-100px);
+        }
+
+        .slide h2 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .slide h3 {
+            font-size: 1.8rem;
+            color: #34495e;
+            margin-bottom: 20px;
+        }
+
+        .slide-content {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .intro-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .intro-slide h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .intro-slide p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .concept-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .concept-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        .concept-card p {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .example-box {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 10px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .example-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #e74c3c, #f39c12, #27ae60, #3498db);
+        }
+
+        .highlight {
+            background: rgba(52, 152, 219, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .narrator { color: #f39c12; }
+        .character { color: #e74c3c; font-weight: bold; }
+        .sfx { color: #27ae60; font-style: italic; }
+        .music { color: #9b59b6; font-style: italic; }
+        .direction { color: #95a5a6; }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 10px 0;
+        }
+
+        .comparison-item {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .wrong-way {
+            background: #fee;
+            border: 2px solid #e74c3c;
+        }
+
+        .right-way {
+            background: #efe;
+            border: 2px solid #27ae60;
+        }
+
+        .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .tip-card {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-top: 3px solid #3498db;
+        }
+
+        .tip-card h4 {
+            color: #2c3e50;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 1rem;
+        }
+
+        .tip-card p {
+            font-size: 0.9rem;
+            line-height: 1.3;
+            margin: 0;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52,152,219,0.3);
+        }
+
+        .nav-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .nav-btn.finish {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #bdc3c7;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #3498db;
+            transform: scale(1.2);
+        }
+
+        .animated-element {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .completion-slide {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .completion-slide h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .completion-slide .icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        .next-steps {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .course-container {
+                width: 100%;
+                height: 100vh;
+                min-height: 500px;
+                max-height: 100vh;
+                border-radius: 0;
+                margin: 0;
+            }
+            
+            .slide {
+                padding: 15px;
+            }
+            
+            .slide h2 {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
+            
+            .header {
+                padding: 10px 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.2rem;
+            }
+            
+            .progress-bar {
+                width: 100px;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .tips-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            
+            .navigation {
+                padding: 10px 15px;
+            }
+            
+            .nav-btn {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .concept-card {
+                padding: 12px;
+                margin: 8px 0;
+            }
+            
+            .intro-slide h2, .completion-slide h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .course-container {
+                max-height: 100vh;
+                height: 100vh;
+            }
+            
+            .slide {
+                padding: 10px;
+            }
+            
+            .slide h2 {
+                font-size: 1.4rem;
+                margin-bottom: 8px;
+            }
+            
+            .concept-card {
+                padding: 10px;
+                margin: 6px 0;
+            }
+            
+            .tips-grid {
+                gap: 6px;
+            }
+            
+            .tip-card {
+                padding: 8px;
+            }
+            
+            .header {
+                padding: 8px 15px;
+            }
+            
+            .navigation {
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="course-container">
+        <div class="header">
+            <h1>🎧 Audio Script Formatting</h1>
+            <div class="progress-indicator">
+                <div class="slide-counter">
+                    <span id="currentSlide">1</span> / <span id="totalSlides">8</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-area">
+            <!-- Slide 1: Introduction -->
+            <div class="slide active intro-slide">
+                <div class="slide-content">
+                    <div class="icon animated-element">🎭</div>
+                    <h2 class="animated-element">Welcome to Audio Script Formatting!</h2>
+                    <p class="animated-element">Learn to write professional scripts for podcasts, audio dramas, and voice-over work.</p>
+                    <p class="animated-element" style="margin-top: 20px; font-size: 1.1rem;">In just a few minutes, you'll master the essential formatting that makes your audio stories come alive!</p>
+                </div>
+            </div>
+
+            <!-- Slide 2: Why Script Formatting Matters -->
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>Why Does Script Formatting Matter?</h2>
+                    <div class="concept-card animated-element">
+                        <h3>🎯 Clear Communication</h3>
+                        <p>Proper formatting ensures everyone on your production team knows exactly what to do - voice actors, sound engineers, and directors.</p>
+                    </div>
+                    <div class="concept-card animated-element">
+                        <h3>⚡ Professional Standards</h3>
+                        <p>Industry-standard formatting shows you're serious about your craft and makes your scripts easy to read and follow.</p>
+                    </div>
+                    <div class="concept-card animated-element">
+                        <h3>🧠 Better Final Product</h3>
+                        <p>Well-formatted scripts lead to smoother recordings, fewer mistakes, and more engaging audio experiences.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: The Four Essential Elements -->
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>The Four Essential Elements</h2>
+                    <p style="text-align: center; font-size: 1.2rem; margin-bottom: 30px; color: #666;">Every professional audio script uses these four building blocks:</p>
+                    
+                    <div class="tips-grid">
+                        <div class="tip-card animated-element">
+                            <h4>📖 <span style="color: #f39c12;">NARRATOR</span></h4>
+                            <p>Sets scenes, provides context, and guides the story forward.</p>
+                        </div>
+                        <div class="tip-card animated-element">
+                            <h4>🎭 <span style="color: #e74c3c;">CHARACTERS</span></h4>
+                            <p>The speakers in your story - always in ALL CAPITALS.</p>
+                        </div>
+                        <div class="tip-card animated-element">
+                            <h4>🔊 <span style="color: #27ae60;">SFX</span></h4>
+                            <p>Sound Effects - all the background sounds and audio atmosphere.</p>
+                        </div>
+                        <div class="tip-card animated-element">
+                            <h4>🎵 <span style="color: #9b59b6;">MUSIC</span></h4>
+                            <p>Musical cues that set mood and guide emotions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Character Names -->
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>Rule #1: Character Names in ALL CAPS</h2>
+                    
+                    <div class="comparison-grid">
+                        <div class="comparison-item wrong-way animated-element">
+                            <div class="icon">❌</div>
+                            <h3>Wrong Way</h3>
+                            <div class="example-box">
+                                <div>sarah: Can you hear me?</div>
+                                <div>Jake: I'm over here!</div>
+                            </div>
+                            <p style="color: #e74c3c; font-weight: bold;">Hard to scan quickly</p>
+                        </div>
+                        
+                        <div class="comparison-item right-way animated-element">
+                            <div class="icon">✅</div>
+                            <h3>Right Way</h3>
+                            <div class="example-box">
+                                <div><span class="character">SARAH:</span> Can you hear me?</div>
+                                <div><span class="character">JAKE:</span> I'm over here!</div>
+                            </div>
+                            <p style="color: #27ae60; font-weight: bold;">Instantly recognizable</p>
+                        </div>
+                    </div>
+                    
+                    <div class="concept-card animated-element">
+                        <h3>💡 Why ALL CAPS?</h3>
+                        <p>Voice actors need to quickly identify who's speaking, especially during fast-paced recording sessions. ALL CAPS makes character names jump off the page!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Sound Effects -->
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>Rule #2: Sound Effects (SFX)</h2>
+                    
+                    <div class="concept-card animated-element">
+                        <h3>🔊 What are Sound Effects?</h3>
+                        <p>Everything your audience hears except dialogue and music - footsteps, doors opening, weather, explosions, ambient sounds.</p>
+                    </div>
+                    
+                    <div class="comparison-grid">
+                        <div class="comparison-item wrong-way animated-element">
+                            <div class="icon">😕</div>
+                            <h3>Vague</h3>
+                            <div class="example-box">
+                                <div><span class="sfx">SFX: Door</span></div>
+                                <div><span class="sfx">SFX: Car</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-item right-way animated-element">
+                            <div class="icon">🌟</div>
+                            <h3>Specific</h3>
+                            <div class="example-box">
+                                <div><span class="sfx">SFX: Heavy wooden door creaks open slowly</span></div>
+                                <div><span class="sfx">SFX: Vintage car engine sputters to life</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="concept-card animated-element">
+                        <h3>🎯 Pro Tip</h3>
+                        <p>Be specific! "Thunder crash" is better than "noise." "Footsteps on gravel" is better than "walking."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Direction Notes -->
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>Rule #3: Direction Notes in (Brackets)</h2>
+                    
+                    <div class="concept-card animated-element">
+                        <h3>🎭 What are Direction Notes?</h3>
+                        <p>Instructions for HOW lines should be delivered - emotional tone, volume, distance, accent, pace.</p>
+                    </div>
+                    
+                    <div class="example-box animated-element">
+                        <div><span class="character">SARAH:</span> <span class="direction">(shouting over wind)</span> Can you hear me?</div>
+                        <div><span class="character">JAKE:</span> <span class="direction">(whispered, scared)</span> Something's out there.</div>
+                        <div><span class="character">NARRATOR:</span> <span class="direction">(mysterious, slow)</span> Little did they know...</div>
+                    </div>
+                    
+                    <div class="tips-grid">
+                        <div class="tip-card animated-element">
+                            <h4>😊 Emotions</h4>
+                            <p>(happy), (angry), (confused), (excited)</p>
+                        </div>
+                        <div class="tip-card animated-element">
+                            <h4>🔊 Volume</h4>
+                            <p>(shouting), (whispered), (mumbled)</p>
+                        </div>
+                        <div class="tip-card animated-element">
+                            <h4>📍 Location</h4>
+                            <p>(from distance), (off-mic), (echoing)</p>
+                        </div>
+                        <div class="tip-card animated-element">
+                            <h4>⚡ Pace</h4>
+                            <p>(rushed), (slowly), (hesitant)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Music Cues -->
+            <div class="slide">
+                <div class="slide-content">
+                    <h2>Rule #4: Music Cues</h2>
+                    
+                    <div class="concept-card animated-element">
+                        <h3>🎵 The Power of Music</h3>
+                        <p>Music guides your audience's emotions, sets the pace, and creates atmosphere. It's the invisible storyteller!</p>
+                    </div>
+                    
+                    <div class="example-box animated-element">
+                        <div><span class="music">MUSIC: Tension builds with low, ominous tones</span></div>
+                        <div><span class="music">MUSIC: Upbeat jazz fades in</span></div>
+                        <div><span class="music">MUSIC: Romantic theme swells</span></div>
+                        <div><span class="music">MUSIC: Abrupt silence</span></div>
+                    </div>
+                    
+                    <div class="tips-grid">
+                        <div class="tip-card animated-element">
+                            <h4>🌅 Scene Setting</h4>
+                            <p>Establish time period, location, or mood right away</p>
+                        </div>
+                        <div class="tip-card animated-element">
+                            <h4>🔄 Transitions</h4>
+                            <p>Smooth cuts between scenes or time jumps</p>
+                        </div>
+                        <div class="tip-card animated-element">
+                            <h4>💓 Emotional Cues</h4>
+                            <p>Tell your audience how to feel about what's happening</p>
+                        </div>
+                        <div class="tip-card animated-element">
+                            <h4>⏰ Pacing</h4>
+                            <p>Speed up excitement or slow down for reflection</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Completion -->
+            <div class="slide completion-slide">
+                <div class="slide-content">
+                    <div class="icon animated-element">🎉</div>
+                    <h2 class="animated-element">Congratulations!</h2>
+                    <p class="animated-element" style="font-size: 1.3rem; margin-bottom: 30px;">You now know the four essential elements of professional audio script formatting!</p>
+                    
+                    <div class="next-steps animated-element">
+                        <h3 style="margin-bottom: 15px;">🚀 Ready for the Interactive Tool?</h3>
+                        <p style="font-size: 1.1rem; line-height: 1.6;">
+                            Now you can experience these concepts in action with our interactive demo, 
+                            test your knowledge with the quiz, and practice writing your own scripts!
+                        </p>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <p style="font-size: 1.1rem;">
+                            <strong>Remember the Four Rules:</strong><br>
+                            📖 NARRATOR guides the story<br>
+                            🎭 CHARACTERS in ALL CAPS<br>
+                            🔊 SFX: Be specific<br>
+                            🎵 MUSIC: Set the mood
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" disabled>
+                ← Previous
+            </button>
+            
+            <div class="slide-dots" id="slideDots">
+                <!-- Dots will be generated by JavaScript -->
+            </div>
+            
+            <button class="nav-btn next" id="nextBtn">
+                Next →
+            </button>
+        </div>
+    </div>
+
+    <script>
+        class MiniCourse {
+            constructor() {
+                this.currentSlide = 0;
+                this.totalSlides = document.querySelectorAll('.slide').length;
+                this.slides = document.querySelectorAll('.slide');
+                
+                this.prevBtn = document.getElementById('prevBtn');
+                this.nextBtn = document.getElementById('nextBtn');
+                this.currentSlideSpan = document.getElementById('currentSlide');
+                this.totalSlidesSpan = document.getElementById('totalSlides');
+                this.progressFill = document.getElementById('progressFill');
+                this.slideDots = document.getElementById('slideDots');
+                
+                this.init();
+            }
+
+            init() {
+                // Set total slides
+                this.totalSlidesSpan.textContent = this.totalSlides;
+                
+                // Create slide dots
+                this.createSlideDots();
+                
+                // Add event listeners
+                this.prevBtn.addEventListener('click', () => this.previousSlide());
+                this.nextBtn.addEventListener('click', () => this.nextSlide());
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.previousSlide();
+                    if (e.key === 'ArrowRight') this.nextSlide();
+                });
+                
+                // Update initial state
+                this.updateSlide();
+                
+                // Auto-animate elements when slides become active
+                this.observeSlides();
+            }
+
+            createSlideDots() {
+                for (let i = 0; i < this.totalSlides; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'dot';
+                    if (i === 0) dot.classList.add('active');
+                    dot.addEventListener('click', () => this.goToSlide(i));
+                    this.slideDots.appendChild(dot);
+                }
+            }
+
+            updateSlide() {
+                // Remove active class from all slides
+                this.slides.forEach((slide, index) => {
+                    slide.classList.remove('active', 'prev');
+                    if (index < this.currentSlide) {
+                        slide.classList.add('prev');
+                    }
+                });
+                
+                // Add active class to current slide
+                this.slides[this.currentSlide].classList.add('active');
+                
+                // Scroll to top of slide area for better mobile experience
+                const slideArea = document.querySelector('.slide-area');
+                slideArea.scrollTop = 0;
+                
+                // Update navigation buttons
+                this.prevBtn.disabled = this.currentSlide === 0;
+                
+                if (this.currentSlide === this.totalSlides - 1) {
+                    this.nextBtn.textContent = '🚀 Start Interactive Tool';
+                    this.nextBtn.classList.add('finish');
+                } else {
+                    this.nextBtn.textContent = 'Next →';
+                    this.nextBtn.classList.remove('finish');
+                }
+                
+                // Update progress
+                this.currentSlideSpan.textContent = this.currentSlide + 1;
+                const progress = ((this.currentSlide + 1) / this.totalSlides) * 100;
+                this.progressFill.style.width = `${progress}%`;
+                
+                // Update dots
+                document.querySelectorAll('.dot').forEach((dot, index) => {
+                    dot.classList.toggle('active', index === this.currentSlide);
+                });
+                
+                // Animate elements in current slide
+                setTimeout(() => this.animateSlideElements(), 100);
+            }
+
+            animateSlideElements() {
+                const currentSlideEl = this.slides[this.currentSlide];
+                const animatedElements = currentSlideEl.querySelectorAll('.animated-element');
+                
+                animatedElements.forEach((element, index) => {
+                    element.style.opacity = '0';
+                    element.style.transform = 'translateY(30px)';
+                    
+                    setTimeout(() => {
+                        element.style.transition = 'all 0.6s ease-out';
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }, index * 200 + 300);
+                });
+            }
+
+            nextSlide() {
+                if (this.currentSlide < this.totalSlides - 1) {
+                    this.currentSlide++;
+                    this.updateSlide();
+                } else {
+                    // Course completed - redirect to interactive tool
+                    this.completeCourse();
+                }
+            }
+
+            previousSlide() {
+                if (this.currentSlide > 0) {
+                    this.currentSlide--;
+                    this.updateSlide();
+                }
+            }
+
+            goToSlide(slideIndex) {
+                this.currentSlide = slideIndex;
+                this.updateSlide();
+            }
+
+            completeCourse() {
+                // Create completion notification
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: white;
+                    padding: 30px;
+                    border-radius: 15px;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                    text-align: center;
+                    z-index: 1000;
+                    max-width: 400px;
+                `;
+                
+                notification.innerHTML = `
+                    <div style="font-size: 3rem; margin-bottom: 15px;">🎉</div>
+                    <h3 style="color: #2c3e50; margin-bottom: 15px;">Course Complete!</h3>
+                    <p style="color: #666; margin-bottom: 20px;">Ready to try the interactive tool?</p>
+                    <button onclick="this.parentElement.remove(); alert('🚀 Open the Interactive Audio Script Tool to continue your learning!');" 
+                            style="background: #27ae60; color: white; border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-size: 1rem;">
+                        🚀 Launch Interactive Tool
+                    </button>
+                    <div style="margin-top: 10px;">
+                        <button onclick="location.reload();" 
+                                style="background: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 15px; cursor: pointer; font-size: 0.9rem;">
+                            🔄 Restart Course
+                        </button>
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Add backdrop
+                const backdrop = document.createElement('div');
+                backdrop.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.5);
+                    z-index: 999;
+                `;
+                
+                document.body.appendChild(backdrop);
+                
+                // Remove backdrop when notification is closed
+                notification.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'BUTTON') {
+                        backdrop.remove();
+                    }
+                });
+            }
+
+            observeSlides() {
+                // Intersection Observer for slide animations
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const animatedElements = entry.target.querySelectorAll('.animated-element');
+                            animatedElements.forEach((element, index) => {
+                                setTimeout(() => {
+                                    element.style.opacity = '1';
+                                    element.style.transform = 'translateY(0)';
+                                }, index * 100);
+                            });
+                        }
+                    });
+                }, {
+                    threshold: 0.5
+                });
+
+                this.slides.forEach(slide => {
+                    observer.observe(slide);
+                });
+            }
+        }
+
+        // Initialize the mini course when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new MiniCourse();
+        });
+
+        // Add some interactive hover effects
+        document.addEventListener('DOMContentLoaded', () => {
+            // Hover effects for concept cards
+            const conceptCards = document.querySelectorAll('.concept-card');
+            conceptCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Hover effects for tip cards
+            const tipCards = document.querySelectorAll('.tip-card');
+            tipCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-3px)';
+                    card.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                    card.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+                });
+            });
+
+            // Add typing effect to example boxes
+            const exampleBoxes = document.querySelectorAll('.example-box');
+            exampleBoxes.forEach(box => {
+                box.addEventListener('mouseenter', () => {
+                    box.style.transform = 'scale(1.02)';
+                    box.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
+                });
+                box.addEventListener('mouseleave', () => {
+                    box.style.transform = 'scale(1)';
+                    box.style.boxShadow = 'none';
+                });
+            });
+        });
+
+        // Add swipe support for mobile
+        let startX = 0;
+        let startY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            if (!startX || !startY) return;
+
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+
+            const diffX = startX - endX;
+            const diffY = startY - endY;
+
+            // Only process horizontal swipes (ignore vertical scrolling)
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                if (diffX > 0) {
+                    // Swipe left - next slide
+                    document.getElementById('nextBtn').click();
+                } else {
+                    // Swipe right - previous slide
+                    document.getElementById('prevBtn').click();
+                }
+            }
+
+            startX = 0;
+            startY = 0;
+        });
+
+        // Add progress saving to localStorage
+        function saveProgress(slideNumber) {
+            localStorage.setItem('audioScriptCourseProgress', slideNumber);
+        }
+
+        function loadProgress() {
+            return parseInt(localStorage.getItem('audioScriptCourseProgress') || '0');
+        }
+
+        // Enhanced course class with progress tracking
+        class EnhancedMiniCourse extends MiniCourse {
+            constructor() {
+                super();
+                this.loadSavedProgress();
+            }
+
+            loadSavedProgress() {
+                const savedProgress = loadProgress();
+                if (savedProgress > 0 && savedProgress < this.totalSlides) {
+                    const shouldResume = confirm(`Welcome back! Would you like to resume from slide ${savedProgress + 1}?`);
+                    if (shouldResume) {
+                        this.currentSlide = savedProgress;
+                        this.updateSlide();
+                    }
+                }
+            }
+
+            updateSlide() {
+                super.updateSlide();
+                saveProgress(this.currentSlide);
+            }
+        }
+    </script>
+</body>
+</html>
